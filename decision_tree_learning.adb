@@ -33,7 +33,7 @@ package body Decision_Tree_Learning is
       end loop;
 
       declare
-         Counts    : array (1 .. Max_C) of Natural := (others => 0);
+         Counts    : array (1 .. Max_C) of Natural := [others => 0];
          Best_C    : Class_Label := 1;
          Max_Count : Natural := 0;
       begin
@@ -67,7 +67,7 @@ package body Decision_Tree_Learning is
       end loop;
 
       declare
-         Counts : array (1 .. Max_C) of Natural := (others => 0);
+         Counts : array (1 .. Max_C) of Natural := [others => 0];
       begin
          for I of Subset loop
             Counts (Y (I)) := Counts (Y (I)) + 1;
@@ -103,7 +103,7 @@ package body Decision_Tree_Learning is
       end loop;
 
       declare
-         Counts : array (1 .. Max_C) of Natural := (others => 0);
+         Counts : array (1 .. Max_C) of Natural := [others => 0];
       begin
          for I of Subset loop
             Counts (Y (I)) := Counts (Y (I)) + 1;
@@ -219,8 +219,9 @@ package body Decision_Tree_Learning is
             end loop;
          end loop;
 
-         -- If a valid split is found, create an internal split node
-         if Best_Gain > 0.0 and Best_Left_Count > 0 and Best_Right_Count > 0 then
+         -- If a valid split is found, create an internal split node.
+         -- Note: Best_Gain >= 0.0 allows learning non-linear XOR splits that initially yield 0 gain.
+         if Best_Gain >= 0.0 and Best_Left_Count > 0 and Best_Right_Count > 0 then
             return new Tree_Node'
               (Kind          => Split,
                Split_Feature => Best_F,
